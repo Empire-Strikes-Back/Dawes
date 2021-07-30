@@ -1,0 +1,5 @@
+[user]
+	email = queryexchange@program
+	name = queryexchange
+
+# git config --local include.path ../.gitconfig
