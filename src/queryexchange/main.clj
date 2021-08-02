@@ -7,45 +7,18 @@
                                      pipeline pipeline-async]]
    [clojure.string]
    [clojure.spec.alpha :as s]
-   [clojure.java.io :as io]
-   [cljfx.api])
-  (:import
-   (javafx.event Event EventHandler)
-   (javafx.stage WindowEvent)
-   (javafx.scene.control DialogEvent Dialog ButtonType ButtonBar$ButtonData)
-   #_javafx.application.Platform))
+   [clojure.java.io :as io]))
 
 (println "clojure.compiler.direct-linking" (System/getProperty "clojure.compiler.direct-linking"))
 (do (set! *warn-on-reflection* true) (set! *unchecked-math* true) (clojure.spec.alpha/check-asserts true))
-
-(defn stage
-  [{:as opts
-    :keys [::program-name]}]
-  (println ::opts opts)
-  {:fx/type :stage
-   :showing true
-   :title program-name
-   :width 1600
-   :height 1200
-   :scene {:fx/type :scene
-           :root {:fx/type :h-box
-                  :children [#_{:fx/type :label :text program-name}]}}})
 
 (defonce stateA (atom nil))
 
 (defn -main [& args]
   (println ::-main)
-  (let [renderer (cljfx.api/create-renderer)]
-    (reset! stateA {:fx/type stage
-                    ::program-name "queryexchange"
-                    ::renderer renderer})
-    (add-watch stateA :watch-fn (fn [k stateA old-state new-state] (-> new-state
-                                                                       (assoc :fx/type stage)
-                                                                       (renderer))))
-
-    (javafx.application.Platform/setImplicitExit true)
-    (renderer @stateA)
-    #_(cljfx.api/mount-renderer stateA render)
+  (let []
+    (reset! stateA {::program-name "queryexchange"})
+    (add-watch stateA :watch-fn (fn [k stateA old-state new-state] new-state))
 
     (go)))
 
